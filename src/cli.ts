@@ -119,7 +119,7 @@ async function main(): Promise<void> {
   console.log(
     `\n${paint(C.bold + "—".repeat(48), C.dim)}\n` +
       `Scanned ${paint(String(results.length), C.bold)} file(s) — ` +
-      `${paint(String(leaked), leaked ? C.yellow : C.green)} still carry hidden content` +
+      `${paint(String(leaked), leaked ? C.yellow : C.green)} still carr${leaked === 1 ? "ies" : "y"} hidden content` +
       (critical ? `, ${paint(String(critical), C.red)} with text/data behind a redaction` : "") +
       ".",
   );

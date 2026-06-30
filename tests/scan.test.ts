@@ -29,6 +29,15 @@ describe("PDF redaction", () => {
     const r = await scan("redacted-report.pdf");
     expect(recovered(r, "pdf.redaction")).not.toContain("redacted for privacy");
   });
+
+  it("handles a modern PDF whose dicts are inside a compressed object stream", async () => {
+    const r = await scan("sealed-filing.pdf");
+    expect(kinds(r)).toContain("pdf.redaction");
+    const text = recovered(r, "pdf.redaction");
+    expect(text).toContain("Marcus Webb");
+    expect(text).toContain("44 Linden Ave");
+    expect(text).not.toContain("Case No");
+  });
 });
 
 describe("xlsx hidden sheets", () => {

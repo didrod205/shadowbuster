@@ -75,6 +75,60 @@ ET
 
 
 # --------------------------------------------------------------------------- #
+# 1b. "Modern" redacted PDF — dictionaries packed in a compressed object stream
+#     (PDF 1.5+ /ObjStm). Exercises ShadowBuster's object-stream expansion.
+# --------------------------------------------------------------------------- #
+def make_pdf_modern():
+    content = b"""BT
+/F1 14 Tf
+1 0 0 1 72 700 Tm (Case No:) Tj
+1 0 0 1 200 700 Tm (2026-CV-8841) Tj
+1 0 0 1 72 670 Tm (Confidential informant:) Tj
+1 0 0 1 240 670 Tm (Marcus Webb) Tj
+1 0 0 1 72 640 Tm (Home address:) Tj
+1 0 0 1 200 640 Tm (44 Linden Ave, Apt 6) Tj
+ET
+0 0 0 rg
+238 666 100 18 re f
+198 636 150 18 re f
+"""
+    # objects 3-6 live INSIDE the object stream (dicts only)
+    inner = {
+        3: b"<< /Type /Catalog /Pages 4 0 R >>",
+        4: b"<< /Type /Pages /Kids [5 0 R] /Count 1 >>",
+        5: b"<< /Type /Page /Parent 4 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 6 0 R >> >> /Contents 1 0 R >>",
+        6: b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
+    }
+    order = [3, 4, 5, 6]
+    bodies = [inner[n] for n in order]
+    offsets, acc = [], 0
+    for b in bodies:
+        offsets.append(acc)
+        acc += len(b) + 1  # +1 for separating newline
+    header = " ".join(f"{n} {off}" for n, off in zip(order, offsets)).encode() + b" "
+    first = len(header)
+    objstm_body = header + b"\n".join(bodies) + b"\n"
+    objstm_comp = zlib.compress(objstm_body, 9)
+
+    out = b"%PDF-1.6\n%\xe2\xe3\xcf\xd3\n"
+    offs = {}
+    offs[1] = len(out)
+    out += b"1 0 obj\n<< /Length %d >>\nstream\n" % len(content) + content + b"endstream\nendobj\n"
+    offs[2] = len(out)
+    out += (
+        b"2 0 obj\n<< /Type /ObjStm /N 4 /First %d /Length %d /Filter /FlateDecode >>\nstream\n"
+        % (first, len(objstm_comp))
+        + objstm_comp
+        + b"\nendstream\nendobj\n"
+    )
+    startxref = len(out)
+    out += b"xref\n0 3\n0000000000 65535 f \n%010d 00000 n \n%010d 00000 n \n" % (offs[1], offs[2])
+    out += b"trailer\n<< /Size 7 /Root 3 0 R >>\nstartxref\n%d\n%%%%EOF\n" % startxref
+    open(os.path.join(OUT, "sealed-filing.pdf"), "wb").write(out)
+
+
+# --------------------------------------------------------------------------- #
 # OOXML helpers
 # --------------------------------------------------------------------------- #
 def write_zip(path, files):
@@ -263,6 +317,7 @@ def make_png():
 
 if __name__ == "__main__":
     make_pdf()
+    make_pdf_modern()
     make_xlsx()
     make_docx()
     make_pptx()

@@ -104,6 +104,37 @@ async function streamBytes(s: string, obj: PdfObject): Promise<Uint8Array> {
   return raw;
 }
 
+/**
+ * PDF 1.5+ packs most dictionary objects (catalog, pages, fonts, ToUnicode
+ * refs) inside compressed *object streams* (/Type /ObjStm). A plain "N G obj"
+ * scan can't see them, so without this a modern document would look empty.
+ * We decompress each ObjStm and add the dictionaries it carries to the map.
+ * (Objects inside an ObjStm are dicts only — streams stay as top-level objects,
+ * which is exactly what we rely on for content streams and ToUnicode CMaps.)
+ */
+async function expandObjectStreams(s: string, objs: Map<number, PdfObject>): Promise<void> {
+  const streams = [...objs.values()].filter((o) => o.streamStart >= 0 && /\/Type\s*\/ObjStm\b/.test(o.dict));
+  for (const os of streams) {
+    let body: string;
+    try {
+      body = latin1(await streamBytes(s, os));
+    } catch {
+      continue;
+    }
+    const n = parseInt(os.dict.match(/\/N\s+(\d+)/)?.[1] ?? "0", 10);
+    const first = parseInt(os.dict.match(/\/First\s+(\d+)/)?.[1] ?? "0", 10);
+    if (!n || !first) continue;
+    const header = body.slice(0, first);
+    const pairs = [...header.matchAll(/(\d+)\s+(\d+)/g)].slice(0, n).map((m) => [parseInt(m[1]!, 10), parseInt(m[2]!, 10)] as const);
+    for (let i = 0; i < pairs.length; i++) {
+      const [num, off] = pairs[i]!;
+      const end = i + 1 < pairs.length ? first + pairs[i + 1]![1] : body.length;
+      if (objs.has(num)) continue; // a real top-level object wins
+      objs.set(num, { num, dict: body.slice(first + off, end), streamStart: -1, streamEnd: -1 });
+    }
+  }
+}
+
 // ---- dict value extraction (balanced) --------------------------------------
 
 function valueAfter(dict: string, key: string): string | null {
@@ -576,6 +607,7 @@ export async function analyzePdf(bytes: Uint8Array): Promise<{ findings: Finding
     notes.push("No PDF objects found — file may be corrupt or not a PDF.");
     return { findings, notes };
   }
+  await expandObjectStreams(s, objs);
 
   // Find page objects.
   const pages = [...objs.values()].filter((o) => /\/Type\s*\/Page(?![a-zA-Z])/.test(o.dict));
