@@ -14,8 +14,8 @@
     }
   },
   "bin": {
-    "shadowbuster": "./dist/cli.js",
-    "unredact": "./dist/cli.js"
+    "shadowbuster": "dist/cli.js",
+    "unredact": "dist/cli.js"
   },
   "files": [
     "dist"
