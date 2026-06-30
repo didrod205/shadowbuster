@@ -1,0 +1,70 @@
+{
+  "name": "shadowbuster",
+  "version": "0.1.0",
+  "description": "That black redaction bar isn't redaction — it's a sticker. Drop a PDF, Excel, Word, PowerPoint, or screenshot and ShadowBuster surfaces the parts that were hidden but never actually removed: text under black boxes, hidden/very-hidden sheets, tracked-change deletions, the uncropped original of a cropped image, white-on-white text. 100% in your browser. Nothing is uploaded.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "bin": {
+    "shadowbuster": "./dist/cli.js",
+    "unredact": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:web": "vite build",
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "fixtures": "python3 scripts/make_fixtures.py",
+    "example": "node dist/cli.js fixtures",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "redaction",
+    "pdf",
+    "metadata",
+    "privacy",
+    "xlsx",
+    "docx",
+    "ooxml",
+    "acropalypse",
+    "security",
+    "no-upload",
+    "in-browser",
+    "zero-dependency"
+  ],
+  "author": "didrod205 (https://github.com/didrod205)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didrod205/shadowbuster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/didrod205/shadowbuster/issues"
+  },
+  "homepage": "https://didrod205.github.io/shadowbuster/",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.21",
+    "vitest": "^2.1.8"
+  }
+}

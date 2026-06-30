@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShadowBuster — that black redaction bar isn't redaction, it's a sticker</title>
+    <meta
+      name="description"
+      content="Drop a PDF, Excel, Word, PowerPoint, or screenshot and ShadowBuster surfaces the parts that were hidden but never removed: text under black redaction boxes, very-hidden spreadsheet tabs, tracked-change deletions, the uncropped original of a cropped image. 100% in your browser. Nothing is uploaded."
+    />
+    <meta property="og:title" content="ShadowBuster 🕶️ — stop trusting black rectangles" />
+    <meta property="og:description" content="Drop a 'redacted' PDF and watch the deleted parts come back — 100% in your browser, nothing uploaded." />
+    <meta name="color-scheme" content="dark" />
+    <script type="module" crossorigin src="./assets/index-C0LSKTe_.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CW25kFah.css">
+  </head>
+  <body>
+    <header>
+      <h1>Shadow<span class="b">Buster</span> <span class="hook">🕶️</span></h1>
+      <p class="tagline">That black redaction bar isn't redaction — <strong>it's a sticker.</strong></p>
+      <p class="sub">
+        Drop a PDF, Excel, Word, PowerPoint, or screenshot. ShadowBuster surfaces what was hidden but
+        <em>never actually removed</em> — text under black boxes, very-hidden sheets, deleted tracked changes,
+        the uncropped original of a cropped image.
+      </p>
+      <p class="privacy">🔒 100% in your browser. The file never leaves this page — no upload, no server, no network.</p>
+    </header>
+
+    <main>
+      <div id="drop" class="drop" tabindex="0" role="button" aria-label="Drop a file or click to choose">
+        <input id="file" type="file" accept=".pdf,.xlsx,.docx,.pptx,.png,.jpg,.jpeg" hidden />
+        <div class="drop-inner">
+          <div class="drop-icon">🕶️</div>
+          <div class="drop-big">Drop a file here</div>
+          <div class="drop-small">or <button id="browse" type="button" class="link">choose one</button> · PDF · xlsx · docx · pptx · png · jpg</div>
+        </div>
+      </div>
+
+      <div class="samples">
+        <span class="dim">No file handy? Try one:</span>
+        <button class="sample" data-file="redacted-report.pdf">📄 redacted PDF</button>
+        <button class="sample" data-file="quarterly-figures.xlsx">📊 hidden-sheet xlsx</button>
+        <button class="sample" data-file="settlement-draft.docx">📝 tracked-deletion docx</button>
+        <button class="sample" data-file="investor-deck.pptx">📽️ cropped-image pptx</button>
+        <button class="sample" data-file="cropped-screenshot.png">🖼️ appended-image png</button>
+      </div>
+
+      <div id="status" class="status"></div>
+      <section id="result" class="result" aria-live="polite"></section>
+    </main>
+
+    <footer>
+      <p class="lead"><strong>Why this exists:</strong> "redacting" by drawing a black box, hiding a sheet, or cropping an image
+      removes <em>nothing</em> — the data is still in the file you sent. ShadowBuster shows you, before you hit send.</p>
+      <p>
+        Same engine in your terminal — batch-scan a whole folder:
+        <code>npx shadowbuster ./documents</code>.
+        <a href="https://github.com/didrod205/shadowbuster">GitHub</a> · MIT
+      </p>
+      <p class="ethics">
+        <strong>Use it on your own files.</strong> ShadowBuster only reveals what a document already carries to anyone who
+        opens it — it's an awareness tool, not an exploit. To <em>truly</em> redact: flatten the PDF / export to image,
+        delete hidden sheets, accept tracked changes, and re-export cropped images. Everything here runs locally; nothing you
+        drop is uploaded or logged.
+      </p>
+    </footer>
+
+  </body>
+</html>

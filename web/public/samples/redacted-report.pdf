@@ -1,0 +1,46 @@
+%PDF-1.5
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 373 >>
+stream
+BT
+/F1 14 Tf
+1 0 0 1 72 700 Tm (Employee name:) Tj
+1 0 0 1 200 700 Tm (Jane Doe) Tj
+1 0 0 1 72 670 Tm (Social Security No:) Tj
+1 0 0 1 200 670 Tm (123-45-6789) Tj
+1 0 0 1 72 640 Tm (Annual salary:) Tj
+1 0 0 1 200 640 Tm ($240,000) Tj
+1 0 0 1 72 590 Tm (This document has been redacted for privacy.) Tj
+ET
+0 0 0 rg
+198 696 110 18 re f
+198 666 120 18 re f
+198 636 90 18 re f
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000670 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+767
+%%EOF
